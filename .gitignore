@@ -11,3 +11,4 @@ __pycache__/
 # Logs & env files
 *.log
 *.env
+/.idea
