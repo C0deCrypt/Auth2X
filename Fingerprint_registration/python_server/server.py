@@ -13,21 +13,37 @@ fernet = Fernet(key)
 def receive_fingerprint():
     try:
         data = request.get_json(force=True)
-        print("📥 Received data:", data)
+        print("\n✅ Received fingerprint data:", data)
 
         # Convert dict to JSON string before encryption
         data_str = json.dumps(data)
         encrypted_data = fernet.encrypt(data_str.encode())
 
-        # You can print or save this encrypted data
         print("🔒 Encrypted fingerprint data:")
         print(encrypted_data)
 
         return {"status": "received", "encrypted": encrypted_data.decode()}, 200
-    
 
     except Exception as e:
         print("❌ Error:", e)
+        return {"status": "error", "message": str(e)}, 400
+
+@app.route('/decrypt', methods=['POST'])
+def decrypt_data():
+    try:
+        req_data = request.get_json(force=True)
+        token = req_data.get("token")
+
+        if not token:
+            return {"status": "error", "message": "No token provided"}, 400
+
+        decrypted = fernet.decrypt(token.encode()).decode()
+        print("🔓 Decrypted data:", decrypted)
+
+        return {"status": "decrypted", "data": decrypted}, 200
+
+    except Exception as e:
+        print("❌ Decryption error:", e)
         return {"status": "error", "message": str(e)}, 400
 
 if __name__ == '__main__':
