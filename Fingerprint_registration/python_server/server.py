@@ -23,29 +23,32 @@ fernet = Fernet(key)
 def receive_fingerprint():
     try:
         data = request.get_json(force=True)
-        print("\nReceived fingerprint data:", data)
+        user = data.get("user", "Unknown")
+        mode = data.get("mode", "unknown")
 
-        # Convert dict to JSON string before encryption
+        print(f"\n🛬 Received from user: {user}, mode: {mode}")
+        print("📥 Raw data:", data)
+
         data_str = json.dumps(data)
         encrypted_data = fernet.encrypt(data_str.encode())
+        print("🔒 Encrypted:", encrypted_data)
 
-        print("Encrypted fingerprint data:")
-        print(encrypted_data)
+        if mode == "register":
+            query = "INSERT INTO fingerprint_logs (user, encrypted_token) VALUES (%s, %s)"
+            cursor.execute(query, (user, encrypted_data.decode()))
+            db.commit()
+            print("✅ Registered and saved to database.")
+            return {"status": "registered"}, 200
 
-        # Extract user field from JSON
-        user = data.get("user", "Unknown")
+        elif mode == "login":
+            print("🔎 Login requested — matching not implemented yet.")
+            return {"status": "login_request", "message": "Login check pending"}, 200
 
-        # Insert into MySQL
-        query = "INSERT INTO fingerprint_logs (user, encrypted_token) VALUES (%s, %s)"
-        cursor.execute(query, (user, encrypted_data.decode()))
-        db.commit()
-
-        print("Data inserted into MySQL.")
-
-        return {"status": "received", "encrypted": encrypted_data.decode()}, 200
+        else:
+            return {"status": "error", "message": "Unknown mode"}, 400
 
     except Exception as e:
-        print("Error:", e)
+        print("❌ Error:", e)
         return {"status": "error", "message": str(e)}, 400
 
 @app.route('/decrypt', methods=['POST'])
