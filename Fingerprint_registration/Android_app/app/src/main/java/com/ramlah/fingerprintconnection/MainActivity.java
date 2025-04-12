@@ -1,30 +1,37 @@
 package com.ramlah.fingerprintconnection;
-import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricManager;
-import androidx.biometric.BiometricPrompt;
-import androidx.core.content.ContextCompat;
 
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-import java.util.concurrent.Executor;
+import android.os.Bundle; import android.widget.Button; import android.widget.EditText; import android.widget.RadioButton; import android.widget.RadioGroup; import android.widget.TextView; import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity; import androidx.biometric.BiometricManager; import androidx.biometric.BiometricPrompt; import androidx.core.content.ContextCompat;
+
+import java.io.OutputStream; import java.net.HttpURLConnection; import java.net.URL; import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
+
+    private TextView statusText;
+    private TextView instructionText;
+    private Button authButton;
+    private RadioGroup modeGroup;
+    private EditText usernameInput;
 
     private void sendAuthToServer() {
         new Thread(() -> {
             try {
-                java.net.URL url = new java.net.URL("http://192.168.1.4:5000/fingerprint");
-                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                int selectedId = modeGroup.getCheckedRadioButtonId();
+                String mode = (selectedId == R.id.registerRadio) ? "register" : "login";
+                String username = usernameInput.getText().toString().trim();
+
+                URL url = new URL("http://192.168.1.4:5000/fingerprint");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setDoOutput(true);
 
-                String jsonInputString = "{\"auth\": \"success\", \"user\": \"MobileUser\"}";
+                String jsonInputString = String.format(
+                        "{\"auth\": \"success\", \"mode\": \"%s\", \"user\": \"%s\"}",
+                        mode, username);
 
-                java.io.OutputStream os = conn.getOutputStream();
+                OutputStream os = conn.getOutputStream();
                 byte[] input = jsonInputString.getBytes("utf-8");
                 os.write(input, 0, input.length);
                 os.flush();
@@ -32,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
                 int responseCode = conn.getResponseCode();
 
-                runOnUiThread(() -> {
-                    Toast.makeText(MainActivity.this, "Server response: " + responseCode, Toast.LENGTH_LONG).show();
-                });
+                runOnUiThread(() ->
+                        Toast.makeText(MainActivity.this, "Server response: " + responseCode, Toast.LENGTH_LONG).show()
+                );
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -45,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    private TextView statusText;
-    private Button authButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,20 @@ public class MainActivity extends AppCompatActivity {
 
         statusText = findViewById(R.id.statusText);
         authButton = findViewById(R.id.authButton);
+        modeGroup = findViewById(R.id.modeGroup);
+        usernameInput = findViewById(R.id.usernameInput);
+        instructionText = findViewById(R.id.instructionText);
+
+        RadioButton registerRadio = findViewById(R.id.registerRadio);
+        RadioButton loginRadio = findViewById(R.id.loginRadio);
+
+        modeGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.registerRadio) {
+                instructionText.setText("Enter your username to register your fingerprint.");
+            } else if (checkedId == R.id.loginRadio) {
+                instructionText.setText("Enter your username to login with fingerprint.");
+            }
+        });
 
         BiometricManager biometricManager = BiometricManager.from(this);
         switch (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
@@ -79,7 +97,12 @@ public class MainActivity extends AppCompatActivity {
                 super.onAuthenticationSucceeded(result);
                 runOnUiThread(() -> {
                     statusText.setText("Authentication successful!");
-                    Toast.makeText(MainActivity.this, "Fingerprint matched!", Toast.LENGTH_SHORT).show();
+                    int selectedId = modeGroup.getCheckedRadioButtonId();
+                    if (selectedId == R.id.registerRadio) {
+                        Toast.makeText(MainActivity.this, "Fingerprint registered successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Login fingerprint verified!", Toast.LENGTH_SHORT).show();
+                    }
                     sendAuthToServer();
                 });
             }
@@ -87,17 +110,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationError(int errorCode, CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                runOnUiThread(() -> {
-                    statusText.setText("Authentication error: " + errString);
-                });
+                runOnUiThread(() ->
+                        statusText.setText("Authentication error: " + errString)
+                );
             }
 
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                runOnUiThread(() -> {
-                    statusText.setText("Authentication failed. Try again.");
-                });
+                runOnUiThread(() ->
+                        statusText.setText("Authentication failed. Try again.")
+                );
             }
         });
 
@@ -109,4 +132,5 @@ public class MainActivity extends AppCompatActivity {
 
         authButton.setOnClickListener(view -> biometricPrompt.authenticate(promptInfo));
     }
+
 }
