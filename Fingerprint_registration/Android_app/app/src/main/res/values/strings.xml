@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Fingerprint(connection)</string>
+    <string name="status_ready">You can use fingerprint to login.</string>
+    <string name="status_no_hw">The device does not have fingerprint hardware.</string>
+    <string name="status_hw_unavailable">Fingerprint hardware is currently unavailable.</string>
+    <string name="status_not_enrolled">No fingerprint enrolled. Please check settings.</string>
+    <string name="auth_success">Authentication successful!</string>
+    <string name="auth_error">Authentication error: </string>
+    <string name="auth_failed">Authentication failed. Try again.</string>
+    <string name="fingerprint_matched">Fingerprint matched!</string>
+    <string name="fingerprint_login">Fingerprint Login</string>
+    <string name="auth_subtitle">Authenticate with your fingerprint</string>
+    <string name="cancel">Cancel</string>
+    <string name="fingerprint_instruction">Place your finger on the scanner</string>
+
+
+</resources>
