@@ -1,23 +1,35 @@
-import sys
 from flask import Flask, request
+from cryptography.fernet import Fernet
+import json
 
 app = Flask(__name__)
+
+# Load your encryption key
+with open("secret.key", "rb") as key_file:
+    key = key_file.read()
+fernet = Fernet(key)
 
 @app.route('/fingerprint', methods=['POST'])
 def receive_fingerprint():
     try:
         data = request.get_json(force=True)
-        print("🚀 Flask server is running...")
-        print("\n✅ Received fingerprint data:", data)
+        print("📥 Received data:", data)
 
-        sys.stdout.flush()
-        return {"status": "received"}, 200
+        # Convert dict to JSON string before encryption
+        data_str = json.dumps(data)
+        encrypted_data = fernet.encrypt(data_str.encode())
+
+        # You can print or save this encrypted data
+        print("🔒 Encrypted fingerprint data:")
+        print(encrypted_data)
+
+        return {"status": "received", "encrypted": encrypted_data.decode()}, 200
+    
+
     except Exception as e:
         print("❌ Error:", e)
-        sys.stdout.flush()
         return {"status": "error", "message": str(e)}, 400
 
 if __name__ == '__main__':
-
-    sys.stdout.flush()
-    app.run(host='0.0.0.0', port=5000)
+    print("🚀 Flask server running with encryption...")
+    app.run(host="0.0.0.0", port=5000)
