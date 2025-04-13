@@ -1,0 +1,32 @@
+<<<<<<< HEAD
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+=======
+# Virtual Environment
+.venv/
+
+# PyCharm specific files
+.idea/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Logs & env files
+*.log
+*.env
+/.idea
+>>>>>>> a4f84e5619523c94f9fdb9800b9471235bbabda9
