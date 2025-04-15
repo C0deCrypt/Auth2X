@@ -44,7 +44,51 @@ def fetch_face_encodings():
 # ========== Face Authentication ==========
 
 def authenticate_face():
+    print("=== Face Authentication ===")
+    key = load_key()
+    known_faces = []
 
+    for username, encrypted_data in fetch_face_encodings():
+        try:
+            encoding = decrypt_encoding(encrypted_data, key)
+            known_faces.append((username, encoding))
+        except Exception as e:
+            print(f"⚠️ Error decrypting data for {username}: {e}")
+
+    cap = cv2.VideoCapture(0)
+    print("📷 Press 's' to scan your face for authentication.")
+
+    authenticated = False
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            continue
+
+        cv2.imshow("Face Authentication", frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('s'):
+            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            face_locations = face_recognition.face_locations(rgb)
+
+            if face_locations:
+                face_encoding = face_recognition.face_encodings(rgb, face_locations)[0]
+
+                for username, known_encoding in known_faces:
+                    matches = face_recognition.compare_faces([known_encoding], face_encoding)
+                    if matches[0]:
+                        print(f"✅ Welcome back, {username}!")
+                        authenticated = True
+                        break
+                if not authenticated:
+                    print("❌ Face not recognized.")
+            else:
+                print("❌ No face detected. Try again.")
+
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
 
 # ========== Main ==========
 
