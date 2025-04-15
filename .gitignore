@@ -1,7 +1,7 @@
-<<<<<<< HEAD
+# === Android Studio / IntelliJ IDEA ===
 *.iml
-.gradle
-/local.properties
+.gradle/
+local.properties
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
@@ -9,24 +9,28 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
-=======
-# Virtual Environment
-.venv/
+/build/
+captures/
+.externalNativeBuild/
+.cxx/
 
-# PyCharm specific files
+# === Python & PyCharm ===
+# Virtual environments
+.venv/
+venv/
+
+# PyCharm specific
 .idea/
 
-# Python cache files
+# Bytecode and cache
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
 
-# Logs & env files
+# Logs and environments
 *.log
 *.env
-/.idea
->>>>>>> a4f84e5619523c94f9fdb9800b9471235bbabda9
+
+# Jupyter Notebooks checkpoints (if used)
+.ipynb_checkpoints/
+
