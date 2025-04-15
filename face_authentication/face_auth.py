@@ -19,46 +19,50 @@ def decrypt_encoding(encrypted_data, key):
 
 # ========== MySQL Database Interaction ==========
 
-def fetch_face_encodings():
-    """Fetch encrypted face encodings from the database."""
+def get_user_encoding(username):
+    """Fetch encrypted face encoding for a specific username."""
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="41257",
+        password="ersatzSQL",
         database="auth2x"
     )
     cursor = conn.cursor()
 
     cursor.execute("""
-            SELECT u.username, b.data
-            FROM users u
-            JOIN biometric_data b ON u.id = b.user_id
-            WHERE b.biometric_type = 'face'
-        """)
+        SELECT b.data
+        FROM users u
+        JOIN biometric_data b ON u.id = b.user_id
+        WHERE u.username = %s AND b.biometric_type = 'face'
+    """, (username,))
 
-    records = cursor.fetchall()
+    result = cursor.fetchone()
     cursor.close()
     conn.close()
-    return records
+
+    return result[0] if result else None
 
 # ========== Face Authentication ==========
 
 def authenticate_face():
     print("=== Face Authentication ===")
-    key = load_key()
-    known_faces = []
+    username = input("Enter your username: ").strip()
 
-    for username, encrypted_data in fetch_face_encodings():
-        try:
-            encoding = decrypt_encoding(encrypted_data, key)
-            known_faces.append((username, encoding))
-        except Exception as e:
-            print(f"⚠️ Error decrypting data for {username}: {e}")
+    key = load_key()
+    encrypted_data = get_user_encoding(username)
+
+    if not encrypted_data:
+        print("❌ No face data found for this username.")
+        return
+
+    try:
+        known_encoding = decrypt_encoding(encrypted_data, key)
+    except Exception as e:
+        print(f"⚠️ Error decrypting data for {username}: {e}")
+        return
 
     cap = cv2.VideoCapture(0)
     print("📷 Press 's' to scan your face for authentication.")
-
-    authenticated = False
 
     while True:
         ret, frame = cap.read()
@@ -73,18 +77,14 @@ def authenticate_face():
 
             if face_locations:
                 face_encoding = face_recognition.face_encodings(rgb, face_locations)[0]
+                match = face_recognition.compare_faces([known_encoding], face_encoding)[0]
 
-                for username, known_encoding in known_faces:
-                    matches = face_recognition.compare_faces([known_encoding], face_encoding)
-                    if matches[0]:
-                        print(f"✅ Welcome back, {username}!")
-                        authenticated = True
-                        break
-                if not authenticated:
-                    print("❌ Face not recognized.")
+                if match:
+                    print(f"✅ Welcome back, {username}!")
+                else:
+                    print("❌ Face does not match this username.")
             else:
                 print("❌ No face detected. Try again.")
-
             break
 
     cap.release()
