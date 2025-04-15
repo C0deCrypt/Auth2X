@@ -20,7 +20,26 @@ def decrypt_encoding(encrypted_data, key):
 # ========== MySQL Database Interaction ==========
 
 def fetch_face_encodings():
+    """Fetch encrypted face encodings from the database."""
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="41257",
+        database="auth2x"
+    )
+    cursor = conn.cursor()
 
+    cursor.execute("""
+            SELECT u.username, b.data
+            FROM users u
+            JOIN biometric_data b ON u.id = b.user_id
+            WHERE b.biometric_type = 'face'
+        """)
+
+    records = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return records
 
 # ========== Face Authentication ==========
 
