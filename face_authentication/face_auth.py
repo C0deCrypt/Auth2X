@@ -6,7 +6,9 @@ import numpy as np
 
 # ========== Encryption Key Handling ==========
 def load_key():
-
+    """Load the saved encryption key."""
+    with open("../Face_registration/secret.key", "rb") as key_file:
+        return key_file.read()
 
 def decrypt_encoding(encrypted_data, key):
 
