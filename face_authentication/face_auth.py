@@ -11,7 +11,11 @@ def load_key():
         return key_file.read()
 
 def decrypt_encoding(encrypted_data, key):
-
+    """Decrypt the encrypted face encoding."""
+    fernet = Fernet(key)
+    decrypted_bytes = fernet.decrypt(encrypted_data.encode())
+    encoding_list = list(map(float, decrypted_bytes.decode().split(',')))
+    return np.array(encoding_list)
 
 # ========== MySQL Database Interaction ==========
 
