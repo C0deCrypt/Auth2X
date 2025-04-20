@@ -1,6 +1,4 @@
 import tkinter as tk
-from ttkbootstrap import Style
-from ttkbootstrap.widgets import Button
 
 def open_register():
     print("Register button clicked")
@@ -15,14 +13,11 @@ def exit_app():
 root = tk.Tk()
 root.title("Auth2X - Welcome")
 root.geometry("500x400")
-root.configure(bg="#0F0F0F")
+root.configure(bg="#202342")
 root.resizable(False, False)
 
-# Apply dark theme using ttkbootstrap
-style = Style(theme="darkly")  # Clean, dark, and modern
-
-# Custom frame to center content
-frame = tk.Frame(root, bg="#0F0F0F")
+# Center frame
+frame = tk.Frame(root, bg="#202342")
 frame.place(relx=0.5, rely=0.5, anchor="center")
 
 # Title
@@ -30,44 +25,49 @@ title = tk.Label(
     frame,
     text="Welcome to Auth2X",
     font=("Segoe UI", 22, "bold"),
-    fg="#00FFB2",  # Neon aqua
-    bg="#0F0F0F"
+    fg="#EDEBE8",
+    bg="#202342"
 )
 title.pack(pady=(0, 40))
 
-# Button Style Tweaks
-btn_width = 25
-btn_font = ("Segoe UI", 12, "bold")
+# Button config
+btn_config = {
+    "width": 22,
+    "font": ("Segoe UI", 12),
+    "bg": "#42CC7E",
+    "fg": "#EDEBE8",
+    "activebackground": "#36b371",
+    "activeforeground": "#ffffff",
+    "relief": "flat",
+    "bd": 0,
+    "highlightthickness": 0,
+    "cursor": "hand2"
+}
 
-# Register Button (Neon Purple)
-register_btn = Button(
-    frame,
-    text="Register",
-    bootstyle="primary",  # Solid modern blue
-    width=btn_width,
-    command=open_register
-)
+# Register Button
+register_btn = tk.Button(frame, text="Register", command=open_register, **btn_config)
 register_btn.pack(pady=10)
 
-# Login Button (Neon Green)
-login_btn = Button(
-    frame,
-    text="Login",
-    bootstyle="primary",  # Solid green
-    width=btn_width,
-    command=open_login
-)
+# Login Button
+login_btn = tk.Button(frame, text="Login", command=open_login, **btn_config)
 login_btn.pack(pady=10)
 
-# Exit Button (Deep Red)
-exit_btn = Button(
+# Exit Button (different color for emphasis)
+exit_btn = tk.Button(
     frame,
     text="Exit",
-    bootstyle="danger",
-    width=btn_width,
-    command=exit_app
+    command=exit_app,
+    bg="#ff5c5c",
+    fg="#EDEBE8",
+    activebackground="#cc4444",
+    activeforeground="#ffffff",
+    width=22,
+    font=("Segoe UI", 12),
+    relief="flat",
+    bd=0,
+    cursor="hand2"
 )
 exit_btn.pack(pady=10)
 
-# Run the loop
+# Run
 root.mainloop()
