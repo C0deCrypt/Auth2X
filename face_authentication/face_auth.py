@@ -13,9 +13,10 @@ def load_key():
 def decrypt_encoding(encrypted_data, key):
     """Decrypt the encrypted face encoding."""
     fernet = Fernet(key)
-    decrypted_bytes = fernet.decrypt(encrypted_data.encode())
+    decrypted_bytes = fernet.decrypt(encrypted_data)  # Removed .encode()
     encoding_list = list(map(float, decrypted_bytes.decode().split(',')))
     return np.array(encoding_list)
+
 
 # ========== MySQL Database Interaction ==========
 
@@ -24,7 +25,7 @@ def get_user_encoding(username):
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="ersatzSQL",
+        password="41257",
         database="auth2x"
     )
     cursor = conn.cursor()
