@@ -1,10 +1,25 @@
 package com.ramlah.fingerprintconnection;
 
-import android.os.Bundle; import android.widget.Button; import android.widget.EditText; import android.widget.RadioButton; import android.widget.RadioGroup; import android.widget.TextView; import android.widget.Toast;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity; import androidx.biometric.BiometricManager; import androidx.biometric.BiometricPrompt; import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 
-import java.io.OutputStream; import java.net.HttpURLConnection; import java.net.URL; import java.util.concurrent.Executor;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
                 String mode = (selectedId == R.id.registerRadio) ? "register" : "login";
                 String username = usernameInput.getText().toString().trim();
 
-                URL url = new URL("http://192.168.1.4:5000/fingerprint");
+                // >>>> Use your actual server IP here
+                URL url = new URL("http://192.168.18.34:5000/fingerprint");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
@@ -38,15 +54,27 @@ public class MainActivity extends AppCompatActivity {
                 os.close();
 
                 int responseCode = conn.getResponseCode();
+                Log.d("NETWORK", "Server Response Code: " + responseCode);
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = in.readLine()) != null) {
+                    response.append(line);
+                }
+                in.close();
+
+                Log.d("NETWORK", "Server Response Body: " + response.toString());
 
                 runOnUiThread(() ->
-                        Toast.makeText(MainActivity.this, "Server response: " + responseCode, Toast.LENGTH_LONG).show()
+                        Toast.makeText(MainActivity.this, "Server response: " + response.toString(), Toast.LENGTH_LONG).show()
                 );
 
             } catch (Exception e) {
                 e.printStackTrace();
+                Log.e("NETWORK", "Exception: " + e.getMessage());
                 runOnUiThread(() ->
-                        Toast.makeText(MainActivity.this, "Exception: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(MainActivity.this, "Connection failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
                 );
             }
         }).start();
@@ -80,10 +108,10 @@ public class MainActivity extends AppCompatActivity {
                 statusText.setText("You can use fingerprint to login.");
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                statusText.setText("The device doesn't have fingerprint hardware.");
+                statusText.setText("This device doesn't have fingerprint hardware.");
                 break;
             case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                statusText.setText("Fingerprint hardware is currently unavailable.");
+                statusText.setText("Fingerprint hardware is unavailable.");
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
                 statusText.setText("No fingerprint enrolled. Please check settings.");
@@ -97,12 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 super.onAuthenticationSucceeded(result);
                 runOnUiThread(() -> {
                     statusText.setText("Authentication successful!");
-                    int selectedId = modeGroup.getCheckedRadioButtonId();
-                    if (selectedId == R.id.registerRadio) {
-                        Toast.makeText(MainActivity.this, "Fingerprint registered successfully!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(MainActivity.this, "Login fingerprint verified!", Toast.LENGTH_SHORT).show();
-                    }
                     sendAuthToServer();
                 });
             }
@@ -132,5 +154,4 @@ public class MainActivity extends AppCompatActivity {
 
         authButton.setOnClickListener(view -> biometricPrompt.authenticate(promptInfo));
     }
-
 }
