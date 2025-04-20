@@ -1,10 +1,15 @@
 import tkinter as tk
+import subprocess
 
 def open_register():
     print("Register button clicked")
+    root.destroy()  # Close current window if needed
+    subprocess.run(["python", "register_gui.py"])
 
 def open_login():
     print("Login button clicked")
+    root.destroy()
+    subprocess.run(["python", "login_gui.py"])
 
 def exit_app():
     root.destroy()
