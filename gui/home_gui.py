@@ -6,7 +6,8 @@ import subprocess
 def open_register():
     print("Register button clicked")
     root.destroy()  # Close current window if needed
-    subprocess.run(["python", "register_gui.py"])
+    register_path = os.path.join(os.path.dirname(__file__), "register_gui.py")
+    subprocess.run([sys.executable, register_path])
 
 def open_login():
     print("Login button clicked")
