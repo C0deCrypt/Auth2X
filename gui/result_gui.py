@@ -9,13 +9,13 @@ root.configure(bg="#0a0f1d")  # Deep navy blue background
 # Font colors and style
 primary_color = "#00ff99"  # Mint green glow
 accent_color = "#1f2833"   # Soft blackish background for contrast
-font_title = ("Helvetica", 24, "bold")
-font_button = ("Helvetica", 12)
+font_title = ("Segoe UI", 24, "bold")
+font_button = ("Segoe UI", 12)
 
 # Title label
 title_label = tk.Label(
     root,
-    text="Access Granted",
+    text="ACCESS GRANTED",
     font=font_title,
     fg=primary_color,
     bg="#0a0f1d"
