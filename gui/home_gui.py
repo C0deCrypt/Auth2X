@@ -1,10 +1,15 @@
 import tkinter as tk
+import subprocess
 
 def open_register():
     print("Register button clicked")
+    root.destroy()  # Close current window if needed
+    subprocess.run(["python", "register_gui.py"])
 
 def open_login():
     print("Login button clicked")
+    root.destroy()
+    subprocess.run(["python", "login_gui.py"])
 
 def exit_app():
     root.destroy()
@@ -35,7 +40,7 @@ btn_config = {
     "width": 22,
     "font": ("Segoe UI", 12),
     "bg": "#42CC7E",
-    "fg": "#EDEBE8",
+    "fg": "#202342",
     "activebackground": "#36b371",
     "activeforeground": "#ffffff",
     "relief": "flat",
@@ -58,7 +63,7 @@ exit_btn = tk.Button(
     text="Exit",
     command=exit_app,
     bg="#ff5c5c",
-    fg="#EDEBE8",
+    fg="#202342",
     activebackground="#cc4444",
     activeforeground="#ffffff",
     width=22,
