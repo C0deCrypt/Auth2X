@@ -53,16 +53,17 @@ def authenticate_face(username):
 
     if not encrypted_data:
         print("❌ No face data found for this username.")
-        return
+        return False
 
     try:
         known_encoding = decrypt_encoding(encrypted_data, key)
     except Exception as e:
         print(f"⚠️ Error decrypting data for {username}: {e}")
-        return
+        return False
 
     cap = cv2.VideoCapture(0)
     print("📷 Press 's' to scan your face for authentication.")
+    auth_success = False
 
     while True:
         ret, frame = cap.read()
@@ -81,6 +82,7 @@ def authenticate_face(username):
 
                 if match:
                     print(f"✅ Welcome back, {username}!")
+                    auth_success = True
                 else:
                     print("❌ Face does not match this username.")
             else:
@@ -89,6 +91,7 @@ def authenticate_face(username):
 
     cap.release()
     cv2.destroyAllWindows()
+    return auth_success
 
 # ========== Main ==========
 
