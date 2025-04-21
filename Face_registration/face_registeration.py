@@ -65,6 +65,8 @@ def register_face(username):
     cap = cv2.VideoCapture(0)
     print("📷 Press 's' to capture your face.")
 
+    success = False  # Default status
+
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -79,12 +81,16 @@ def register_face(username):
             if face_locations:
                 face_encoding = face_recognition.face_encodings(rgb, face_locations)[0]
                 print("✅ Face captured.")
+                success = True
                 break
             else:
                 print("❌ No face detected. Please try again.")
+                success = False
 
     cap.release()
     cv2.destroyAllWindows()
+
+    return success
 
     generate_key()
     key = load_key()
