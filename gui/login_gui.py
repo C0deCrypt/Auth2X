@@ -164,7 +164,10 @@ class LoginGUI:
             return
 
         if method == "Face Recognition":
-            messagebox.showinfo("Authentication", f"Initiating facial recognition for {username}")
+            from face_authentication.face_auth import authenticate_face
+            self.root.withdraw()  # Hide GUI
+            authenticate_face(username)
+            self.root.deiconify()  # Show GUI again after auth
         else:
             messagebox.showinfo("Authentication", f"Initiating fingerprint scan for {username}")
 
