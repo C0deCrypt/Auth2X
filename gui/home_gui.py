@@ -1,3 +1,5 @@
+import os
+import sys
 import tkinter as tk
 import subprocess
 
@@ -9,7 +11,8 @@ def open_register():
 def open_login():
     print("Login button clicked")
     root.destroy()
-    subprocess.run(["python", "login_gui.py"])
+    login_path = os.path.join(os.path.dirname(__file__), "login_gui.py")
+    subprocess.run([sys.executable, login_path])
 
 def exit_app():
     root.destroy()
@@ -17,21 +20,21 @@ def exit_app():
 # Initialize the root window
 root = tk.Tk()
 root.title("Auth2X - Welcome")
-root.geometry("500x400")
-root.configure(bg="#202342")
+root.geometry("500x600")
+root.configure(bg="#0a0f1d")
 root.resizable(False, False)
 
 # Center frame
-frame = tk.Frame(root, bg="#202342")
+frame = tk.Frame(root, bg="#0a0f1d")
 frame.place(relx=0.5, rely=0.5, anchor="center")
 
 # Title
 title = tk.Label(
     frame,
-    text="Welcome to Auth2X",
-    font=("Segoe UI", 22, "bold"),
+    text="WELCOME TO AUTH2X",
+    font=("Segoe UI", 25, "bold"),
     fg="#EDEBE8",
-    bg="#202342"
+    bg="#0a0f1d"
 )
 title.pack(pady=(0, 40))
 
