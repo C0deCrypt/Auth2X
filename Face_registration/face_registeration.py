@@ -58,9 +58,8 @@ def save_to_database(username, email, biometric_type, encrypted_data):
 
 # ========== Face Capture & Registration ==========
 
-def register_face():
+def register_face(username):
     print("=== Face Registration ===")
-    username = input("Enter your name: ").strip()
     email = input("Enter your email: ").strip()
 
     cap = cv2.VideoCapture(0)
