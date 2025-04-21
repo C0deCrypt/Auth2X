@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, font
 import sv_ttk
+import os
+import sys
+import subprocess
 
 class RegisterGUI:
     def __init__(self, root):
@@ -145,8 +148,14 @@ class RegisterGUI:
         if method == "Face Registration":
             from Face_registration.face_registeration import register_face
             self.root.withdraw()
-            register_face(username)
+            result = register_face(username)
             self.root.deiconify()
+            if result:
+                self.root.destroy()  # Close the login window
+                login_path = os.path.join(os.path.dirname(__file__), "login_gui.py")
+                subprocess.run([sys.executable, login_path])
+            else:
+                messagebox.showerror("Registration Failed", "Face registeration failed.")
         else:
             messagebox.showinfo("Registration", f"Initiating fingerprint registration for {username}")
 
