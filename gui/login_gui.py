@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, font
+import os
+import sys
+import subprocess
 import sv_ttk
 
 
@@ -166,8 +169,15 @@ class LoginGUI:
         if method == "Face Recognition":
             from face_authentication.face_auth import authenticate_face
             self.root.withdraw()  # Hide GUI
-            authenticate_face(username)
+            result = authenticate_face(username)
             self.root.deiconify()  # Show GUI again after auth
+            if result:
+                self.root.destroy()  # Close the login window
+                result_path = os.path.join(os.path.dirname(__file__), "result_gui.py")
+                subprocess.run([sys.executable, result_path])
+            else:
+                messagebox.showerror("Authentication Failed", "Face authentication failed.")
+
         else:
             messagebox.showinfo("Authentication", f"Initiating fingerprint scan for {username}")
 
