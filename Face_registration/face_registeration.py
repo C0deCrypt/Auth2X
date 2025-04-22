@@ -102,4 +102,6 @@ def register_face(username):
 # ========== Main ==========
 
 if __name__ == "__main__":
-    register_face()
+    username = input("Enter your username: ").strip()
+    register_face(username)
+

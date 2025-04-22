@@ -96,4 +96,5 @@ def authenticate_face(username):
 # ========== Main ==========
 
 if __name__ == "__main__":
-    authenticate_face()
+    username = input("Enter your username: ").strip()
+    authenticate_face(username)
