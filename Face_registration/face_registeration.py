@@ -26,7 +26,7 @@ def encrypt_encoding(encoding, key):
 
 # ========== MySQL Database Interaction ==========
 
-def save_to_database(username, email, biometric_type, encrypted_data):
+def save_to_database(username, biometric_type, encrypted_data):
     """Save encrypted biometric data with user info into MySQL."""
     conn = mysql.connector.connect(
         host="localhost",
@@ -43,7 +43,7 @@ def save_to_database(username, email, biometric_type, encrypted_data):
     if result:
         user_id = result[0]
     else:
-        cursor.execute("INSERT INTO users (username, email) VALUES (%s, %s)", (username, email))
+        cursor.execute("INSERT INTO users (username) VALUES (%s)", (username,))
         user_id = cursor.lastrowid
 
     # Insert biometric data
@@ -60,12 +60,11 @@ def save_to_database(username, email, biometric_type, encrypted_data):
 
 def register_face(username):
     print("=== Face Registration ===")
-    email = input("Enter your email: ").strip()
 
     cap = cv2.VideoCapture(0)
     print("📷 Press 's' to capture your face.")
 
-    success = False  # Default status
+    face_encoding = None
 
     while True:
         ret, frame = cap.read()
@@ -81,23 +80,22 @@ def register_face(username):
             if face_locations:
                 face_encoding = face_recognition.face_encodings(rgb, face_locations)[0]
                 print("✅ Face captured.")
-                success = True
                 break
             else:
                 print("❌ No face detected. Please try again.")
-                success = False
 
     cap.release()
     cv2.destroyAllWindows()
 
-    return success
-
-    generate_key()
-    key = load_key()
-    encrypted_data = encrypt_encoding(face_encoding, key)
-    save_to_database(username, email, "face", encrypted_data)
-
-    print(f"🎉 {username} registered successfully!")
+    if face_encoding is not None:
+        generate_key()
+        key = load_key()
+        encrypted_data = encrypt_encoding(face_encoding, key)
+        save_to_database(username, "face", encrypted_data)
+        print(f"🎉 {username} registered successfully!")
+        return True
+    else:
+        return False
 
 # ========== Main ==========
 
