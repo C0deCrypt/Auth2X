@@ -4,7 +4,7 @@ from cryptography.fernet import Fernet
 import mysql.connector
 import os
 
-# ========== Encryption Key Handling ==========
+
 
 def generate_key():
     """Generate a new encryption key if not already present."""
@@ -24,7 +24,7 @@ def encrypt_encoding(encoding, key):
     encoding_str = ','.join(map(str, encoding))
     return fernet.encrypt(encoding_str.encode())
 
-# ========== MySQL Database Interaction ==========
+
 
 def save_to_database(username, biometric_type, encrypted_data):
     """Save encrypted biometric data with user info into MySQL."""
@@ -56,7 +56,7 @@ def save_to_database(username, biometric_type, encrypted_data):
     cursor.close()
     conn.close()
 
-# ========== Face Capture & Registration ==========
+
 
 def register_face(username):
     print("=== Face Registration ===")
@@ -97,7 +97,7 @@ def register_face(username):
     else:
         return False
 
-# ========== Main ==========
+
 
 if __name__ == "__main__":
     register_face()
