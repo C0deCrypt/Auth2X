@@ -151,7 +151,7 @@ class RegisterGUI:
             result = register_face(username)
             self.root.deiconify()
             if result:
-                self.root.destroy()  # Close the login window
+                self.root.destroy()
                 login_path = os.path.join(os.path.dirname(__file__), "login_gui.py")
                 subprocess.run([sys.executable, login_path])
             else:
