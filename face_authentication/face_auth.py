@@ -4,7 +4,6 @@ from cryptography.fernet import Fernet
 import mysql.connector
 import numpy as np
 
-# ========== Encryption Key Handling ==========
 def load_key():
     """Load the saved encryption key."""
     with open("../gui/secret.key", "rb") as key_file:
@@ -17,8 +16,6 @@ def decrypt_encoding(encrypted_data, key):
     encoding_list = list(map(float, decrypted_bytes.decode().split(',')))
     return np.array(encoding_list)
 
-
-# ========== MySQL Database Interaction ==========
 
 def get_user_encoding(username):
     """Fetch encrypted face encoding for a specific username."""
@@ -43,8 +40,6 @@ def get_user_encoding(username):
 
     return result[0] if result else None
 
-# ========== Face Authentication ==========
-
 def authenticate_face(username):
     print("=== Face Authentication ===")
 
@@ -52,17 +47,17 @@ def authenticate_face(username):
     encrypted_data = get_user_encoding(username)
 
     if not encrypted_data:
-        print("❌ No face data found for this username.")
+        print(" No face data found for this username.")
         return False
 
     try:
         known_encoding = decrypt_encoding(encrypted_data, key)
     except Exception as e:
-        print(f"⚠️ Error decrypting data for {username}: {e}")
+        print(f" Error decrypting data for {username}: {e}")
         return False
 
     cap = cv2.VideoCapture(0)
-    print("📷 Press 's' to scan your face for authentication.")
+    print(" Press 's' to scan your face for authentication.")
     auth_success = False
 
     while True:
@@ -81,19 +76,19 @@ def authenticate_face(username):
                 match = face_recognition.compare_faces([known_encoding], face_encoding)[0]
 
                 if match:
-                    print(f"✅ Welcome back, {username}!")
+                    print(f" Welcome back, {username}!")
                     auth_success = True
                 else:
-                    print("❌ Face does not match this username.")
+                    print(" Face does not match this username.")
             else:
-                print("❌ No face detected. Try again.")
+                print(" No face detected. Try again.")
             break
 
     cap.release()
     cv2.destroyAllWindows()
     return auth_success
 
-# ========== Main ==========
+# Main
 
 if __name__ == "__main__":
     authenticate_face()
