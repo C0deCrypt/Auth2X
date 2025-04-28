@@ -10,12 +10,11 @@ class LoginGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Secure Login")
-        self.root.geometry("500x600")  # Initial size
+        self.root.geometry("500x600")
         self.root.configure(bg="#0a0f1d")
-        self.root.resizable(False, False)  # Allow both horizontal and vertical resizing
+        self.root.resizable(False, False)
 
-        # # Set minimum window size
-        # self.root.minsize(380, 500)
+
 
         # Bind the resize event
         self.root.bind("<Configure>", self.on_window_resize)
@@ -26,7 +25,7 @@ class LoginGUI:
         self.create_widgets()
 
     def on_window_resize(self, event):
-        # Adjust elements proportionally when window resizes
+
         width = self.root.winfo_width()
 
         # Scale fonts based on window width
@@ -68,7 +67,7 @@ class LoginGUI:
         content_frame = tk.Frame(self.main_frame, bg="#0a0f1d")
         content_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
 
-        # Logo/Header - now centered and responsive
+        # Header
         logo_label = tk.Label(
             content_frame,
             text="🔒 SECURE ACCESS",
@@ -79,7 +78,7 @@ class LoginGUI:
         )
         logo_label.pack(pady=(0, 30), fill="x")
 
-        # Authentication method dropdown - responsive width
+        # Authentication method dropdown
         method_frame = tk.Frame(content_frame, bg="#0a0f1d")
         method_frame.pack(fill="x", pady=(0, 15))
 
@@ -100,7 +99,7 @@ class LoginGUI:
         self.auth_method.set("Face Recognition")
         self.auth_method.pack(fill="x", pady=(8, 0), ipady=3)
 
-        # Username input - responsive width
+        # Username input
         username_frame = tk.Frame(content_frame, bg="#0a0f1d")
         username_frame.pack(fill="x", pady=(0, 25))
 
@@ -143,7 +142,7 @@ class LoginGUI:
         login_btn.bind("<Enter>", lambda e: login_btn.config(bg="#4BDF8B"))
         login_btn.bind("<Leave>", lambda e: login_btn.config(bg="#42CC7E"))
 
-        # Footer - responsive
+        # Footer
         footer_frame = tk.Frame(content_frame, bg="#0a0f1d")
         footer_frame.pack(fill="x", pady=(30, 0))
 
@@ -168,11 +167,11 @@ class LoginGUI:
 
         if method == "Face Recognition":
             from face_authentication.face_auth import authenticate_face
-            self.root.withdraw()  # Hide GUI
+            self.root.withdraw()
             result = authenticate_face(username)
-            self.root.deiconify()  # Show GUI again after auth
+            self.root.deiconify()
             if result:
-                self.root.destroy()  # Close the login window
+                self.root.destroy()
                 result_path = os.path.join(os.path.dirname(__file__), "result_gui.py")
                 subprocess.run([sys.executable, result_path])
             else:
