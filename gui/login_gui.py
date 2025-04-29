@@ -15,28 +15,12 @@ class LoginGUI:
         self.root.resizable(False, False)
 
 
-
-        # Bind the resize event
-        self.root.bind("<Configure>", self.on_window_resize)
-
         # Load custom fonts
         self.load_fonts()
         sv_ttk.set_theme("dark")
         self.create_widgets()
 
-    def on_window_resize(self, event):
 
-        width = self.root.winfo_width()
-
-        # Scale fonts based on window width
-        base_size = max(10, min(14, int(width / 30)))
-        self.headline_font.configure(size=base_size + 10)
-        self.label_font.configure(size=base_size - 2)
-        self.button_font.configure(size=base_size)
-
-        # Update padding based on window size
-        padx_val = max(20, int(width * 0.05))
-        self.main_frame.configure(padx=padx_val)
 
     def load_fonts(self):
         try:
