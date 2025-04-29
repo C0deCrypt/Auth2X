@@ -41,7 +41,7 @@ def get_user_encoding(username):
     return result[0] if result else None
 
 def authenticate_face(username):
-    print("=== Face Authentication ===")
+    print(" Face Authentication ")
 
     key = load_key()
     encrypted_data = get_user_encoding(username)
