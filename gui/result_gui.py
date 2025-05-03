@@ -3,7 +3,7 @@ import tkinter as tk
 # Setup main window
 root = tk.Tk()
 root.title("Login Successful")
-root.geometry("500x300")
+root.geometry("500x600")
 root.configure(bg="#0a0f1d")  # Deep navy blue background
 
 # Font colors and style
