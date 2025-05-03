@@ -5,10 +5,10 @@ from cryptography.fernet import Fernet
 import mysql.connector
 from datetime import datetime
 
-FINGERPRINT_DIR = "../fingerprints/"
-DB_CONFIG_PATH = "../config/db_config.json"
-SECRET_KEY_PATH = "../config/secret.key"
-CONFIG_PATH = "../config/config.json"
+FINGERPRINT_DIR = "D:/repo/Auth2X/fingerprint/fingerprints/"
+DB_CONFIG_PATH = "D:/repo/Auth2X/fingerprint/config/db_config.json"
+SECRET_KEY_PATH = "D:/repo/Auth2X/fingerprint/config/secret.key"
+CONFIG_PATH = "D:/repo/Auth2X/fingerprint/config/config.json"
 
 IMG_WIDTH = 260
 IMG_HEIGHT = 300
