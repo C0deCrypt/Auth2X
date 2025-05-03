@@ -48,7 +48,7 @@ def save_to_database(username, biometric_type, encrypted_data):
 
     # Insert biometric data
     cursor.execute("""
-        INSERT INTO biometric_data (user_id, biometric_type, data)
+        INSERT INTO biometric_data (user_id, type, data)
         VALUES (%s, %s, %s)
     """, (user_id, biometric_type, encrypted_data))
 

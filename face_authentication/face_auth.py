@@ -31,7 +31,7 @@ def get_user_encoding(username):
         SELECT b.data
         FROM users u
         JOIN biometric_data b ON u.id = b.user_id
-        WHERE u.username = %s AND b.biometric_type = 'face'
+        WHERE u.username = %s AND b.type = 'face'
     """, (username,))
 
     result = cursor.fetchone()
