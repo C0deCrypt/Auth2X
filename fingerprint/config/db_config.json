@@ -1,5 +1,6 @@
 {
   "host": "localhost",
   "user": "root",
-  "password": "5284912015"
+  "password": "5284912015",
+  "database": "auth2x"
 }

@@ -1,62 +1,61 @@
+import json
 import os
 import sys
-import mysql.connector
 from cryptography.fernet import Fernet
+import mysql.connector
 from datetime import datetime
-import json
 
-# Load DB config
-with open('../config/db_config.json', 'r') as f:
-    db_config = json.load(f)
+FINGERPRINT_DIR = "../fingerprints/"
+DB_CONFIG_PATH = "../config/db_config.json"
+SECRET_KEY_PATH = "../config/secret.key"
+CONFIG_PATH = "../config/config.json"
 
-# Load encryption key
-with open('../config/secret.key', 'rb') as key_file:
-    key = key_file.read()
-fernet = Fernet(key)
-
-# Check arguments
-if len(sys.argv) != 2:
-    print("Usage: python store_encrypted_data.py <username>")
-    sys.exit(1)
+IMG_WIDTH = 260
+IMG_HEIGHT = 300
 
 username = sys.argv[1]
-file_path = f"../fingerprints/{username}.dat"
 
-# Check file exists
-if not os.path.exists(file_path):
-    print(f"File not found: {file_path}")
-    sys.exit(1)
+# === Load Config ===
+with open(CONFIG_PATH, 'r') as f:
+    config = json.load(f)
+encrypt_enabled = config.get("encrypt_fingerprint", True)
 
-# Read and encrypt fingerprint
-with open(file_path, 'rb') as f:
+# === Load fingerprint ===
+fp_path = os.path.join(FINGERPRINT_DIR, username + ".dat")
+with open(fp_path, 'rb') as f:
     raw_data = f.read()
-encrypted_data = fernet.encrypt(raw_data)
 
-# Store in MySQL
-conn = mysql.connector.connect(
-    host=db_config['host'],
-    user=db_config['user'],
-    password=db_config['password'],
-    database='auth2x'
-)
+if len(raw_data) != IMG_WIDTH * IMG_HEIGHT:
+    raise ValueError("Invalid fingerprint image size!")
+
+# === Encrypt if flag is enabled ===
+if encrypt_enabled:
+    with open(SECRET_KEY_PATH, 'rb') as f:
+        key = f.read()
+    fernet = Fernet(key)
+    data_to_store = fernet.encrypt(raw_data)
+else:
+    print("[DEBUG] Encryption disabled. Storing raw fingerprint.")
+    data_to_store = raw_data
+
+# === Load DB Config ===
+with open(DB_CONFIG_PATH, 'r') as f:
+    db_config = json.load(f)
+
+conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# Find user ID
 cursor.execute("SELECT id FROM users WHERE username = %s", (username,))
 result = cursor.fetchone()
 if not result:
-    print(f"User '{username}' not found.")
-    sys.exit(1)
+    raise Exception(f"No user found with username: {username}")
 user_id = result[0]
 
-# Insert into biometric_data
 cursor.execute("""
     INSERT INTO biometric_data (user_id, biometric_type, data, created_at)
     VALUES (%s, %s, %s, %s)
-""", (user_id, 'fingerprint', encrypted_data, datetime.now()))
-conn.commit()
+""", (user_id, 'fingerprint', data_to_store, datetime.now()))
 
+conn.commit()
 cursor.close()
 conn.close()
-
-print("✅ Fingerprint stored successfully.")
