@@ -1,6 +1,13 @@
 # Auth2X: Secure Biometric Authentication System
 
-**Tech Stack:** Python, C++, MySQL, Tkinter, OpenCV, SecuGen SDK, SSIM
+**Tech Stack:** 
+- Python
+- C++
+- MySQL
+- Tkinter
+- OpenCV
+- SecuGen SDK
+- SSIM
 
 ---
 
@@ -11,43 +18,44 @@
 - **Face recognition** (via OpenCV-based facial encoding)
 - **Fingerprint matching** (via SecuGen Hamster Plus and image similarity using SSIM)
 
-It supports encrypted storage of fingerprint data using **Fernet AES encryption** and is integrated with a Tkinter GUI for both registration and authentication.
+It supports encrypted storage of biometric data using **Fernet AES encryption** and integrates with a **Tkinter GUI** for both **registration** and **authentication**.
 
 ---
 
 ## 🧠 Key Features
 
 - 🔐 **Fingerprint & Face Authentication**
-- 🔑 **Encrypted Fingerprint Storage (Optional)**
-- 📸 **Auto-saves debug `.png` files of fingerprints**
+- 🔑 **Encrypted Biometric Data Storage**
+- 📸 **Auto-saves debug .png files of fingerprints**
 - 🗃️ **User info + biometric data stored in MySQL**
 - 🖥️ **C++ Executable for Fingerprint Capture using SecuGen SDK**
-- 🧪 **Robust SSIM-based fingerprint matching with debug outputs**
+- 🧪 **SSIM-based fingerprint comparison with debugging logs**
 
 ---
 
-## 🧱 Folder Structure
+## 🗂️ Folder Structure
 
 ```
 Auth2X/
 ├── gui/
-│   ├── home_gui.py
-│   ├── login_gui.py
-│   ├── register_gui.py
-│   └── result_gui.py
-├── face_authentication/
-│   └── face_auth.py
-├── Face_registration/
-│   └── face_registeration.py
+│   ├── home\_gui.py
+│   ├── login\_gui.py
+│   ├── register\_gui.py
+│   └── result\_gui.py
+├── face\_authentication/
+│   └── face\_auth.py
+├── Face\_registration/
+│   └── face\_registeration.py
 ├── fingerprint/
 │   ├── capture/
 │   ├── config/
 │   │   ├── config.json
-│   │   ├── db_config.json
+│   │   ├── db\_config.json
 │   │   └── secret.key
-│   ├── encrypt_store/
-│   │   └── store_encrypt_data.py
+│   ├── encrypt\_store/
+│   │   └── store\_encrypt\_data.py
 │   └── fingerprints/
+
 ```
 
 ---
@@ -61,9 +69,10 @@ Auth2X/
 - Visual Studio 2019+
 - SecuGen SDK (FDx Pro SDK)
 - Python dependencies:
+
 ```bash
 pip install mysql-connector-python cryptography opencv-python-headless numpy scikit-image sv-ttk pillow
-```
+````
 
 ---
 
@@ -93,14 +102,16 @@ CREATE TABLE biometric_data (
 
 ### 3. 🔧 Configuration
 
-- `config.json`
+#### `config.json`
+
 ```json
 {
   "encrypt_fingerprint": true
 }
 ```
 
-- `db_config.json`
+#### `db_config.json`
+
 ```json
 {
   "host": "localhost",
@@ -110,7 +121,8 @@ CREATE TABLE biometric_data (
 }
 ```
 
-- `secret.key`
+#### `secret.key`
+
 ```python
 from cryptography.fernet import Fernet
 with open("secret.key", "wb") as f:
@@ -119,16 +131,16 @@ with open("secret.key", "wb") as f:
 
 ---
 
-### 4. 🧱 C++ Fingerprint EXE Build
+## 🧱 C++ Fingerprint EXE Build
 
-- Use Visual Studio to build `CaptureFingerprint.cpp`
-- Link with `sgfplib.lib`
-- Place all required DLLs next to the EXE
-- Output: `CaptureFingerprint.exe` in `x64/Debug/`
+* Use Visual Studio to build `CaptureFingerprint.cpp`
+* Link with `sgfplib.lib`
+* Place all required DLLs next to the EXE
+* Output: `CaptureFingerprint.exe` in `x64/Debug/`
 
 ---
 
-### 5. 🔐 Run the App
+## 🔐 How to Run
 
 ```bash
 python gui/home_gui.py
@@ -136,41 +148,89 @@ python gui/home_gui.py
 
 ---
 
-## 🔍 Workflow
+## 🔄 Workflow Overview
 
-### Registration
+### 🧍‍♂️ Fingerprint Module
 
-- Capture fingerprint
-- Store image as `.dat`
-- Encrypt if enabled
-- Store to DB
-- store fingerprint as img for testing too(uncomment the raw image line)
-### Login
+#### ✅ Registration:
 
-- Capture fingerprint again
-- Decrypt stored data
-- Reshape both to `(260x300)`
-- Compute SSIM
-- Match if `SSIM > 0.85`
-- store live-fingerprint as img for testing too(uncomment the raw image line)
+* Capture fingerprint via SecuGen SDK
+* Store image as `.dat`
+* Encrypt (if enabled in `config.json`)
+* Save in MySQL `biometric_data` table
+* Optionally save `.png` for debugging (`debug_raw_registered.png`)
+
+#### 🔐 Authentication:
+
+* Capture new fingerprint
+* Decrypt stored fingerprint
+* Resize both to `260x300`
+* Compare using **SSIM**
+* Match if SSIM > 0.85
+* Saves comparison images like:
+
+  * `debug_raw_live.png`
+  * `debug_raw_stored.png`
+
+👤 **Fingerprint Contributors:**
+
+* **Ramlah Munir** – [LinkedIn](https://www.linkedin.com/in/ramlah-munir-6b2320344)
+* **Talal** – *(LinkedIn to be added)*
+
+---
+
+### 🧑‍🦱 Face Module
+
+#### ✅ Registration:
+
+* Capture live webcam image using OpenCV
+* Detect face using `face_recognition` library
+* Extract **128-dimension face encoding**
+* Encrypt the encoding with **Fernet**
+* Store securely in MySQL
+
+#### 🔐 Authentication:
+
+* Fetch encrypted encoding from DB
+* Decrypt using Fernet key
+* Compare live webcam face with stored encoding using `compare_faces()`
+* Authenticate if match returns True
+
+🖼️ Uses real-time webcam view with prompt to press `s` for scan.
+
+👤 **Face Recognition Contributors:**
+
+* **Ayaan Ahmed Khan** – [LinkedIn](https://www.linkedin.com/in/ayaan-ahmed-khan-448600351)
+* **Mohammad Umar Nasir** – [LinkedIn](https://www.linkedin.com/in/mohammad-umar-nasir)
 
 ---
 
 ## 🧪 Debugging & Logs
 
-- Fingerprint PNGs:
-  - `debug_raw_registered.png`
-  - `debug_raw_stored.png`
-  - `debug_raw_live.png`
+* Fingerprint Debug PNGs:
+
+  * `debug_raw_registered.png`
+  * `debug_raw_stored.png`
+  * `debug_raw_live.png`
+* Face module logs errors on decryption or detection failures
 
 ---
 
 ## ❓ FAQ
 
-- Low SSIM? Try better alignment.
+**Q:** Low SSIM?
+**A:** Re-align finger properly, avoid motion blur.
+
+**Q:** Face not detected?
+**A:** Check lighting, background, and camera angle.
+
 ---
 
 ## 📩 Contact
 
-For issues or questions, contact: `ramlahmunir786@gmail.com`
+* Fingerprint: [ramlahmunir786@gmail.com](mailto:ramlahmunir786@gmail.com)
+* Face: [Ayaan's LinkedIn](https://www.linkedin.com/in/ayaan-ahmed-khan-448600351), [Umar's LinkedIn](https://www.linkedin.com/in/mohammad-umar-nasir)
+
+---
+
 
