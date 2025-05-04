@@ -13,15 +13,14 @@ class RegisterGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("User Registration")
-        #self.root.geometry("500x600")
-        # Set dimensions
+        # --- Center the window on the screen ---
         window_width = 500
         window_height = 600
-        screen_width = self.root.winfo_screenwidth()
-        screen_height = self.root.winfo_screenheight()
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
         x = int((screen_width / 2) - (window_width / 2))
         y = int((screen_height / 2) - (window_height / 2))
-        self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        root.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
         self.root.configure(bg="#0a0f1d")
         self.root.resizable(False, False)
@@ -36,12 +35,8 @@ class RegisterGUI:
 
     def create_widgets(self):
         self.main_frame = tk.Frame(self.root, bg="#0a0f1d", padx=30, pady=40)
-<<<<<<< HEAD
-        #self.main_frame.pack(expand=True, fill="both")
-        self.main_frame.pack(expand=True)
-=======
-        self.main_frame.pack(expand=True, fill="both")
->>>>>>> 93b416efcc00f63cf8d96b2611f52628c33a483d
+        self.main_frame.pack(expand=True, )
+
 
         content_frame = tk.Frame(self.main_frame, bg="#0a0f1d")
         content_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
@@ -126,13 +121,8 @@ class RegisterGUI:
                 # Save PNG for debug
                 with open(fp_path, 'rb') as f:
                     raw = f.read()
-<<<<<<< HEAD
                 #img = np.frombuffer(raw, dtype=np.uint8).reshape((300, 260))
                 #Image.fromarray(img).save(f"debug_{username}_registered.png")
-=======
-                img = np.frombuffer(raw, dtype=np.uint8).reshape((300, 260))
-                Image.fromarray(img).save(f"debug_{username}_registered.png")
->>>>>>> 93b416efcc00f63cf8d96b2611f52628c33a483d
 
                 print("[INFO] Running fingerprint storage...")
                 subprocess.run([sys.executable, STORE_SCRIPT, username], check=True)

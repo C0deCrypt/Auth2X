@@ -1,53 +1,73 @@
 import tkinter as tk
 
-# Setup main window
+# ---------- Setup Main Window ----------
 root = tk.Tk()
 root.title("Login Successful")
-root.geometry("500x600")
-root.configure(bg="#0a0f1d")  # Deep navy blue background
 
-# Font colors and style
-primary_color = "#00ff99"  # Mint green glow
-accent_color = "#1f2833"   # Soft blackish background for contrast
-font_title = ("Segoe UI", 24, "bold")
-font_button = ("Segoe UI", 12)
+# Define dimensions
+window_width = 500
+window_height = 600
 
-# Title label
+# Center the window on screen
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+x = int((screen_width / 2) - (window_width / 2))
+y = int((screen_height / 2) - (window_height / 2))
+root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+root.configure(bg="#0a0f1d")  # Dark navy background
+root.resizable(False, False)
+
+# ---------- Define Colors & Fonts ----------
+PRIMARY_COLOR = "#00ff99"   # Neon mint green
+ACCENT_COLOR = "#1f2833"    # Dark grayish-black
+FONT_TITLE = ("Segoe UI", 26, "bold")
+FONT_SUBTEXT = ("Segoe UI", 14)
+FONT_BUTTON = ("Segoe UI", 12, "bold")
+
+# ---------- Main Frame to Center Content ----------
+main_frame = tk.Frame(root, bg="#0a0f1d")
+main_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+# ---------- Title ----------
 title_label = tk.Label(
-    root,
-    text="ACCESS GRANTED",
-    font=font_title,
-    fg=primary_color,
-    bg="#0a0f1d"
+    main_frame,
+    text="✅ ACCESS GRANTED",
+    font=FONT_TITLE,
+    fg=PRIMARY_COLOR,
+    bg="#0a0f1d",
+    pady=10
 )
-title_label.pack(pady=60)
+title_label.pack(pady=(0, 20))
 
-# Message
+# ---------- Welcome Message ----------
 msg_label = tk.Label(
-    root,
+    main_frame,
     text="Welcome to the system!",
-    font=("Helvetica", 14),
-    fg="white",
+    font=FONT_SUBTEXT,
+    fg="#EDEBE8",
     bg="#0a0f1d"
 )
-msg_label.pack()
+msg_label.pack(pady=(0, 30))
 
-# Close button
+# ---------- Close Button ----------
 def close_window():
     root.destroy()
 
 close_btn = tk.Button(
-    root,
+    main_frame,
     text="Close",
-    font=font_button,
-    bg=primary_color,
-    fg="black",
+    font=FONT_BUTTON,
+    bg=PRIMARY_COLOR,
+    fg="#0a0f1d",
     activebackground="#00cc88",
-    padx=10,
-    pady=5,
-    command=close_window,
-    relief="flat"
+    activeforeground="white",
+    padx=20,
+    pady=8,
+    relief="flat",
+    cursor="hand2",
+    command=close_window
 )
-close_btn.pack(pady=30)
+close_btn.pack()
 
+# ---------- Run ----------
 root.mainloop()
