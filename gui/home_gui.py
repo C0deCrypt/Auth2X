@@ -25,6 +25,18 @@ root.geometry("500x600")
 root.configure(bg="#0a0f1d")
 root.resizable(False, False)
 
+# Center the window on the screen
+window_width = 500
+window_height = 600
+# Get screen width and height
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+# Calculate position x, y
+x = int((screen_width / 2) - (window_width / 2))
+y = int((screen_height / 2) - (window_height / 2))
+# Set the geometry
+root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+
 # Center frame
 frame = tk.Frame(root, bg="#0a0f1d")
 frame.place(relx=0.5, rely=0.5, anchor="center")

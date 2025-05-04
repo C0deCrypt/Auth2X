@@ -28,7 +28,11 @@
               "RelativeDocumentMoniker": "CaptureFingerprint\\CaptureFingerprint.cpp",
               "ToolTip": "D:\\repo\\Auth2X\\fingerprint\\capture\\CaptureFingerprint\\CaptureFingerprint\\CaptureFingerprint.cpp*",
               "RelativeToolTip": "CaptureFingerprint\\CaptureFingerprint.cpp*",
+<<<<<<< HEAD
+              "ViewState": "AgIAAEoAAAAAAAAAAAAuwGEAAAAAAAAAAAAAAA==",
+=======
               "ViewState": "AgIAAAUAAAAAAAAAAAAuwBAAAAAEAAAAAAAAAA==",
+>>>>>>> 93b416efcc00f63cf8d96b2611f52628c33a483d
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-05-02T22:03:29.181Z",
               "EditorCaption": ""

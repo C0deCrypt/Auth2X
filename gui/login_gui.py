@@ -15,7 +15,16 @@ class LoginGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Secure Login")
-        self.root.geometry("500x600")
+        #self.root.geometry("500x600")
+        # --- Center the window on the screen ---
+        window_width = 500
+        window_height = 600
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+        x = int((screen_width / 2) - (window_width / 2))
+        y = int((screen_height / 2) - (window_height / 2))
+        root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+
         self.root.configure(bg="#0a0f1d")
         self.root.resizable(False, False)
         self.load_fonts()
@@ -29,7 +38,8 @@ class LoginGUI:
 
     def create_widgets(self):
         self.main_frame = tk.Frame(self.root, bg="#0a0f1d", padx=30, pady=40)
-        self.main_frame.pack(expand=True, fill="both")
+        #self.main_frame.pack(expand=True, fill="both")
+        self.main_frame.pack(expand=True)
 
         content_frame = tk.Frame(self.main_frame, bg="#0a0f1d")
         content_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
@@ -118,8 +128,13 @@ class LoginGUI:
                 stored_np = np.frombuffer(stored_fp, dtype=np.uint8).reshape((IMG_HEIGHT, IMG_WIDTH))
 
                 # Save PNGs
+<<<<<<< HEAD
+#                Image.fromarray(live_np).save(f"debug_raw_live.png")
+#                Image.fromarray(stored_np).save(f"debug_raw_stored.png")
+=======
                 Image.fromarray(live_np).save(f"debug_raw_live.png")
                 Image.fromarray(stored_np).save(f"debug_raw_stored.png")
+>>>>>>> 93b416efcc00f63cf8d96b2611f52628c33a483d
 
                 # SSIM
                 score, _ = ssim(live_np.astype(np.float32) / 255.0,
@@ -127,7 +142,11 @@ class LoginGUI:
                                 data_range=1.0, full=True)
                 print(f"[DEBUG] SSIM = {score:.4f}")
 
+<<<<<<< HEAD
+                if score > 0.30:
+=======
                 if score > 0.85:
+>>>>>>> 93b416efcc00f63cf8d96b2611f52628c33a483d
                     messagebox.showinfo("Success", f"User '{username}' authenticated successfully.")
                     self.root.destroy()
                     subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), "result_gui.py")])
