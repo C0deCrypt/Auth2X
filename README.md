@@ -175,7 +175,7 @@ python gui/home_gui.py
 👤 **Fingerprint Contributors:**
 
 * **Ramlah Munir** – [LinkedIn](https://www.linkedin.com/in/ramlah-munir-6b2320344)
-* **Talal** – *(LinkedIn to be added)*
+* **Talal** – [LinkedIn](https://www.linkedin.com/in/muhammad-talal-1675a0351)
 
 ---
 
@@ -228,7 +228,7 @@ python gui/home_gui.py
 
 ## 📩 Contact
 
-* Fingerprint: [ramlahmunir786@gmail.com](mailto:ramlahmunir786@gmail.com)
+* Fingerprint: [ramlahmunir786@gmail.com](mailto:ramlahmunir786@gmail.com), [Talal's LinkedIn](https://www.linkedin.com/in/muhammad-talal-1675a0351)
 * Face: [Ayaan's LinkedIn](https://www.linkedin.com/in/ayaan-ahmed-khan-448600351), [Umar's LinkedIn](https://www.linkedin.com/in/mohammad-umar-nasir)
 
 ---
