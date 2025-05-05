@@ -7,7 +7,7 @@
 - Tkinter
 - OpenCV
 - SecuGen SDK
-- SSIM
+- Minutiae-Based Matching
 
 ---
 
@@ -16,7 +16,7 @@
 **Auth2X** is a dual-mode biometric authentication system that supports:
 
 - **Face recognition** (via OpenCV-based facial encoding)
-- **Fingerprint matching** (via SecuGen Hamster Plus and image similarity using SSIM)
+- **Fingerprint matching** (via SecuGen Hamster Plus and custom minutiae comparison)
 
 It supports encrypted storage of biometric data using **Fernet AES encryption** and integrates with a **Tkinter GUI** for both **registration** and **authentication**.
 
@@ -26,36 +26,37 @@ It supports encrypted storage of biometric data using **Fernet AES encryption** 
 
 - 🔐 **Fingerprint & Face Authentication**
 - 🔑 **Encrypted Biometric Data Storage**
-- 📸 **Auto-saves debug .png files of fingerprints**
+- 🧬 **Minutiae Extraction and Matching (No third-party matcher)**
 - 🗃️ **User info + biometric data stored in MySQL**
 - 🖥️ **C++ Executable for Fingerprint Capture using SecuGen SDK**
-- 🧪 **SSIM-based fingerprint comparison with debugging logs**
+- 🧪 **Match Ratio-based fingerprint comparison with logs**
 
 ---
 
 ## 🗂️ Folder Structure
 
-```
+```bash
 Auth2X/
 ├── gui/
-│   ├── home\_gui.py
-│   ├── login\_gui.py
-│   ├── register\_gui.py
-│   └── result\_gui.py
-├── face\_authentication/
-│   └── face\_auth.py
-├── Face\_registration/
-│   └── face\_registeration.py
+│   ├── home_gui.py
+│   ├── login_gui.py
+│   ├── register_gui.py
+│   └── result_gui.py
+├── face_authentication/
+│   └── face_auth.py
+├── Face_registration/
+│   └── face_registeration.py
 ├── fingerprint/
 │   ├── capture/
 │   ├── config/
 │   │   ├── config.json
-│   │   ├── db\_config.json
+│   │   ├── db_config.json
 │   │   └── secret.key
-│   ├── encrypt\_store/
-│   │   └── store\_encrypt\_data.py
+│   |
+│   ├── store_template.py
+│   └── match_template.py
+│   ├── match_utils.py
 │   └── fingerprints/
-
 ```
 
 ---
@@ -72,7 +73,7 @@ Auth2X/
 
 ```bash
 pip install mysql-connector-python cryptography opencv-python-headless numpy scikit-image sv-ttk pillow
-````
+```
 
 ---
 
@@ -156,25 +157,25 @@ python gui/home_gui.py
 
 * Capture fingerprint via SecuGen SDK
 * Store image as `.dat`
+* Extract minutiae from thinned skeleton
 * Encrypt (if enabled in `config.json`)
 * Save in MySQL `biometric_data` table
-* Optionally save `.png` for debugging (`debug_raw_registered.png`)
 
 #### 🔐 Authentication:
 
 * Capture new fingerprint
-* Decrypt stored fingerprint
-* Resize both to `260x300`
-* Compare using **SSIM**
-* Match if SSIM > 0.85
-* Saves comparison images like:
-
-  * `debug_raw_live.png`
-  * `debug_raw_stored.png`
+* Extract minutiae
+* Fetch and decrypt stored template
+* Compare using:
+  - Minutiae type match (ending/bifurcation)
+  - Euclidean distance < 10 px
+* Match if ratio > 0.65
+* Terminal logs:  
+  `Matches: 24, Ratio: 0.75`
 
 👤 **Fingerprint Contributors:**
 
-* **Ramlah Munir** – [LinkedIn](https://www.linkedin.com/in/ramlah-munir-6b2320344)
+* **Ramlah Munir** – [LinkedIn](https://www.linkedin.com/in/ramlah-munir-6b2320344)  
 * **Talal** – [LinkedIn](https://www.linkedin.com/in/muhammad-talal-1675a0351)
 
 ---
@@ -200,37 +201,34 @@ python gui/home_gui.py
 
 👤 **Face Recognition Contributors:**
 
-* **Ayaan Ahmed Khan** – [LinkedIn](https://www.linkedin.com/in/ayaan-ahmed-khan-448600351)
+* **Ayaan Ahmed Khan** – [LinkedIn](https://www.linkedin.com/in/ayaan-ahmed-khan-448600351)  
 * **Mohammad Umar Nasir** – [LinkedIn](https://www.linkedin.com/in/mohammad-umar-nasir)
 
 ---
 
 ## 🧪 Debugging & Logs
 
-* Fingerprint Debug PNGs:
-
-  * `debug_raw_registered.png`
-  * `debug_raw_stored.png`
-  * `debug_raw_live.png`
-* Face module logs errors on decryption or detection failures
+* Fingerprint `.dat` storage:
+  - `username.dat` and `username_live.dat`
+* Logs printed from matcher:
+  - `Matches: X, Ratio: 0.YYY`
+* Face module logs:
+  - Decryption failures
+  - Encoding mismatches
 
 ---
 
 ## ❓ FAQ
 
-**Q:** Low SSIM?
-**A:** Re-align finger properly, avoid motion blur.
+**Q:** Low match ratio?  
+**A:** Re-align finger, check capture quality, avoid moisture and blur.
 
-**Q:** Face not detected?
-**A:** Check lighting, background, and camera angle.
+**Q:** Face not detected?  
+**A:** Use good lighting, keep background simple, position face fully in frame.
 
 ---
 
 ## 📩 Contact
 
-* Fingerprint: [Ramlah's Linkedin](https://www.linkedin.com/in/ramlah-munir-6b2320344), [Talal's LinkedIn](https://www.linkedin.com/in/muhammad-talal-1675a0351)
+* Fingerprint: [Ramlah's LinkedIn](https://www.linkedin.com/in/ramlah-munir-6b2320344), [Talal's LinkedIn](https://www.linkedin.com/in/muhammad-talal-1675a0351)  
 * Face: [Ayaan's LinkedIn](https://www.linkedin.com/in/ayaan-ahmed-khan-448600351), [Umar's LinkedIn](https://www.linkedin.com/in/mohammad-umar-nasir)
-
----
-
-
