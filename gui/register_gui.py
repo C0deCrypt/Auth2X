@@ -86,7 +86,7 @@ class RegisterGUI:
             try:
                 DB_CONFIG_PATH = "../fingerprint/config/db_config.json"
                 EXE_PATH = os.path.abspath("../fingerprint/capture/CaptureFingerprint/x64/Debug/CaptureFingerprint.exe")
-                STORE_SCRIPT = os.path.abspath("../fingerprint/encrypt_store/store_encrypt_data.py")
+                STORE_SCRIPT = os.path.abspath("../fingerprint/store_template.py")
                 FP_DIR = os.path.abspath("../fingerprint/fingerprints/")
                 fp_path = os.path.join(FP_DIR, f"{username}.dat")
 
@@ -95,8 +95,8 @@ class RegisterGUI:
                         raise FileNotFoundError(f"Required file not found: {path}")
                 if not os.path.isdir(FP_DIR):
                     os.makedirs(FP_DIR)
-                    print(f"[INFO] Created missing fingerprint directory at {FP_DIR}")
 
+                # Insert user to DB
                 with open(DB_CONFIG_PATH, 'r') as f:
                     db_config = json.load(f)
                 conn = mysql.connector.connect(**db_config)
@@ -105,26 +105,15 @@ class RegisterGUI:
                 conn.commit()
                 cursor.close()
                 conn.close()
-                print(f"[INFO] User '{username}' inserted into database.")
 
-                print("[INFO] Running fingerprint capture EXE...")
+                # Capture fingerprint
                 result = subprocess.run([EXE_PATH, username], capture_output=True, text=True)
-                print("[STDOUT]:", result.stdout)
-                print("[STDERR]:", result.stderr)
-
                 if result.returncode != 0:
-                    raise RuntimeError(f"Fingerprint capture failed with code {result.returncode}.")
-
+                    raise RuntimeError(f"Fingerprint capture failed: {result.stderr}")
                 if not os.path.exists(fp_path):
-                    raise FileNotFoundError(f"Expected fingerprint not found: {fp_path}")
+                    raise FileNotFoundError(f"Expected fingerprint file not found: {fp_path}")
 
-                # Save PNG for debug
-                with open(fp_path, 'rb') as f:
-                    raw = f.read()
-                #img = np.frombuffer(raw, dtype=np.uint8).reshape((300, 260))
-                #Image.fromarray(img).save(f"debug_{username}_registered.png")
-
-                print("[INFO] Running fingerprint storage...")
+                # Run fingerprint processing
                 subprocess.run([sys.executable, STORE_SCRIPT, username], check=True)
 
                 messagebox.showinfo("Success", f"User '{username}' registered successfully.")
@@ -133,6 +122,7 @@ class RegisterGUI:
 
             except Exception as e:
                 messagebox.showerror("Error", str(e))
+
 
 if __name__ == "__main__":
     root = tk.Tk()
