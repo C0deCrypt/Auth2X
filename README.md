@@ -1,3 +1,4 @@
+
 # Auth2X: Secure Biometric Authentication System
 
 **Tech Stack:** 
@@ -33,6 +34,33 @@ It supports encrypted storage of biometric data using **Fernet AES encryption** 
 
 ---
 
+## 📚 Fingerprint Matching Method
+
+This project uses a **minutiae-based fingerprint matching pipeline** that works as follows:
+
+- Captured `.dat` image files (260x300) are loaded as raw binary
+- Preprocessing includes binarization, skeletonization, and noise filtering
+- Minutiae points (ridge endings & bifurcations) are extracted from the fingerprint skeleton
+- Matching is performed by comparing geometrical proximity (Euclidean distance < 10 pixels) and type similarity
+- Match ratio is calculated based on overlapping features
+- If the match ratio > 0.65, authentication is accepted
+
+All extracted templates are **Fernet-encrypted** before being stored in the database.
+
+---
+
+## 🧰 Libraries Used
+
+- `numpy` – Image array manipulation
+- `mysql-connector-python` – Database connection
+- `cryptography.fernet` – AES encryption of biometric templates
+- `scikit-image` – Image skeletonization and preprocessing
+- `tkinter` – GUI interface for user interaction
+- `opencv-python` – Face capture and recognition
+- `sv-ttk` – Dark theme styling for Tkinter GUI
+
+---
+
 ## 🗂️ Folder Structure
 
 ```bash
@@ -52,9 +80,8 @@ Auth2X/
 │   │   ├── config.json
 │   │   ├── db_config.json
 │   │   └── secret.key
-│   |
 │   ├── store_template.py
-│   └── match_template.py
+│   ├── match_template.py
 │   ├── match_utils.py
 │   └── fingerprints/
 ```
