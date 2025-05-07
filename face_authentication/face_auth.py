@@ -22,7 +22,7 @@ def get_user_encoding(username):
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="41257",
+        password="5284912015",
         database="auth2x"
     )
     cursor = conn.cursor()
