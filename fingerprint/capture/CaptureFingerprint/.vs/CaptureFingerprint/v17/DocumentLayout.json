@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\repo\\Auth2X\\fingerprint\\capture\\CaptureFingerprint\\",
+  "WorkspaceRootPath": "D:\\repositoryafter-presentation\\Auth2X\\fingerprint\\capture\\CaptureFingerprint\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7A1ABF8A-28E6-4936-8586-8040AB7C68E9}|CaptureFingerprint\\CaptureFingerprint.vcxproj|D:\\repo\\Auth2X\\fingerprint\\capture\\CaptureFingerprint\\CaptureFingerprint\\CaptureFingerprint.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{7A1ABF8A-28E6-4936-8586-8040AB7C68E9}|CaptureFingerprint\\CaptureFingerprint.vcxproj|D:\\repositoryafter-presentation\\Auth2X\\fingerprint\\capture\\CaptureFingerprint\\CaptureFingerprint\\CaptureFingerprint.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{7A1ABF8A-28E6-4936-8586-8040AB7C68E9}|CaptureFingerprint\\CaptureFingerprint.vcxproj|solutionrelative:CaptureFingerprint\\CaptureFingerprint.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -24,19 +24,13 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "CaptureFingerprint.cpp",
-              "DocumentMoniker": "D:\\repo\\Auth2X\\fingerprint\\capture\\CaptureFingerprint\\CaptureFingerprint\\CaptureFingerprint.cpp",
+              "DocumentMoniker": "D:\\repositoryafter-presentation\\Auth2X\\fingerprint\\capture\\CaptureFingerprint\\CaptureFingerprint\\CaptureFingerprint.cpp",
               "RelativeDocumentMoniker": "CaptureFingerprint\\CaptureFingerprint.cpp",
-<<<<<<< HEAD
-              "ToolTip": "D:\\repo\\Auth2X\\fingerprint\\capture\\CaptureFingerprint\\CaptureFingerprint\\CaptureFingerprint.cpp",
+              "ToolTip": "D:\\repositoryafter-presentation\\Auth2X\\fingerprint\\capture\\CaptureFingerprint\\CaptureFingerprint\\CaptureFingerprint.cpp",
               "RelativeToolTip": "CaptureFingerprint\\CaptureFingerprint.cpp",
-              "ViewState": "AgIAAEoAAAAAAAAAAAAwwGEAAAAAAAAAAAAAAA==",
-=======
-              "ToolTip": "D:\\repo\\Auth2X\\fingerprint\\capture\\CaptureFingerprint\\CaptureFingerprint\\CaptureFingerprint.cpp*",
-              "RelativeToolTip": "CaptureFingerprint\\CaptureFingerprint.cpp*",
-              "ViewState": "AgIAAEoAAAAAAAAAAAAuwGEAAAAAAAAAAAAAAA==",
->>>>>>> 93b416efcc00f63cf8d96b2611f52628c33a483d
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-02T22:03:29.181Z",
+              "WhenOpened": "2025-05-07T10:21:23Z",
               "EditorCaption": ""
             }
           ]

@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
     }
 
     string username = argv[1];
-    string dirPath = "D:/repo/Auth2X/fingerprint/fingerprints";
+    string dirPath = "D:/repositoryafter-presentation/Auth2X/fingerprint/fingerprints/";
     string filePath = dirPath + "/" + username + ".dat";
 
     // ✅ Create folder if not exists

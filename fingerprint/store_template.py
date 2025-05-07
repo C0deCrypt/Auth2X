@@ -10,10 +10,10 @@ from match_utils import preprocess_fingerprint, extract_minutiae
 
 IMG_WIDTH = 260
 IMG_HEIGHT = 300
-
-FINGERPRINT_DIR = "D:/repo/Auth2X/fingerprint/fingerprints/"
-DB_CONFIG_PATH = "D:/repo/Auth2X/fingerprint/config/db_config.json"
-SECRET_KEY_PATH = "D:/repo/Auth2X/fingerprint/config/secret.key"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # directory of the current file
+FINGERPRINT_DIR = os.path.join(BASE_DIR, "fingerprints")
+DB_CONFIG_PATH = os.path.join(BASE_DIR, "config", "db_config.json")
+SECRET_KEY_PATH = os.path.join(BASE_DIR, "config", "secret.key")
 
 username = sys.argv[1]
 path = os.path.join(FINGERPRINT_DIR, f"{username}.dat")
@@ -47,9 +47,9 @@ if not result:
 user_id = result[0]
 
 cursor.execute("""
-    INSERT INTO biometric_data (user_id, biometric_type, data, created_at)
-    VALUES (%s, %s, %s, %s)
-""", (user_id, 'fingerprint', encrypted, datetime.now()))
+    INSERT INTO biometric_data (user_id, type, data)
+    VALUES (%s, %s, %s)
+""", (user_id, 'finger', encrypted))
 
 conn.commit()
 cursor.close()
