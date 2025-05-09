@@ -22,7 +22,7 @@ def get_user_encoding(username):
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="5284912015",
+        password="bythebandit@028",
         database="auth2x"
     )
     cursor = conn.cursor()
@@ -31,7 +31,7 @@ def get_user_encoding(username):
         SELECT b.data
         FROM users u
         JOIN biometric_data b ON u.id = b.user_id
-        WHERE u.username = %s AND b.type = 'face'
+        WHERE u.username = %s AND b.biometric_type = 'face'
     """, (username,))
 
     result = cursor.fetchone()
