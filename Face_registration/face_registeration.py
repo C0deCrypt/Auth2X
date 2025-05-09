@@ -31,7 +31,7 @@ def save_to_database(username, biometric_type, encrypted_data):
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="5284912015",
+        password="bythebandit@028",
         database="auth2x"
     )
     cursor = conn.cursor()
@@ -48,7 +48,7 @@ def save_to_database(username, biometric_type, encrypted_data):
 
     # Insert biometric data
     cursor.execute("""
-        INSERT INTO biometric_data (user_id, type, data)
+        INSERT INTO biometric_data (user_id, biometric_type, data)
         VALUES (%s, %s, %s)
     """, (user_id, biometric_type, encrypted_data))
 
