@@ -164,6 +164,7 @@ with open("secret.key", "wb") as f:
 * Use Visual Studio to build `CaptureFingerprint.cpp`
 * Link with `sgfplib.lib`
 * Place all required DLLs next to the EXE
+* set your fingerprints directory path in sln
 * Output: `CaptureFingerprint.exe` in `x64/Debug/`
 
 ---
